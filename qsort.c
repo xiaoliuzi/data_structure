@@ -1,48 +1,50 @@
 #include <stdio.h>
 
-void print(int *p, int n)
+void prt(int *p, int n)
 {
 	int i = 0;
-	prinf("\n");
-	for(i = 0; i < n, i++) {
+	printf("\n");
+	for(i = 0; i < n; i++) {
 		printf("%4d", *(p+i));
 	}
-	prinf("\n");
+	printf("\n");
 }
 
-void xlz_qsort(int a[], int n)
+void xlz_qsort(int a[], int low, int high)
 {
-	int i = 0;
-	int low = 0;
-	int high = n-1;
-	int pivot;
-	int swap_tmp;
-	for(i = 0; i < n; i++) {
-		pivot = a[i];
-		while ( low != high ) {
-			while( pivot < a[high] && low < high) {
-				high--;
-			}
-			if( low < high ) {
-				a[low] = a[high];
-				low++;
-			}
-			else {
-				break;
-			}
-			while( pivot > a[low] && low < high) {
-				low++;	
-			}
-			if( low < high ) {
-				a[high] = a[low];
-				high--;
-			}
-			else {
-				break;
-			}
-		} /* end of while */
 
-	} /* end of for */
+	int pivot;
+	if (low < high) {
+		pivot = partition(a, low, high);
+		xlz_qsort(a, low, pivot-1);
+		xlz_qsort(a, pivot+1, high);
+
+	}
+}
+
+
+int partition(int a[], int low, int high)
+{
+	int pivot;
+	pivot = a[low];
+	while ( low < high ) {
+		while( pivot <= a[high] && low < high) {
+			high--;
+		}
+		if( low < high ) {
+			a[low] = a[high];
+		}
+		while( pivot >= a[low] && low < high) {
+			low++;	
+		}
+		if( low < high ) {
+			a[high] = a[low];
+		}
+	} /* end of while */
+
+	a[low] = pivot;
+	return low;
+//	} /* end of for */
 	
 }
 
@@ -52,12 +54,15 @@ int main(void)
 
 	int a[10] = {72, 6, 57, 88, 60,
 				42, 83, 73, 48, 85};
+//	int a[10] = {49, 38, 65, 97, 76,
+//				13, 27, 49, 48, 85};
 	int p;
 	int i;
+	int n = 10;
 
-	print(a, 10);
-	xlz_qsort(a, n);
-	print(a, n);
+	prt(a, 10);
+	xlz_qsort(a, 0, 9);
+	prt(a, n);
 
 	return 0;
 }
